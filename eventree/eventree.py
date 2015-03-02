@@ -32,8 +32,8 @@ class TreeGraph():
         cuts = 0
         for node in self.adj_list:
             for edge_node in self.adj_list[node].copy():
-                if (self.__number_connected_is_even(node, edge_node)
-                    and self.__number_connected_is_even(edge_node, node)):
+                if (self.__nodes_in_subtree_is_even(node, edge_node)
+                    and self.__nodes_in_subtree_is_even(edge_node, node)):
                     self.__cut(node, edge_node)
                     cuts += 1
         return cuts
@@ -56,7 +56,7 @@ class TreeGraph():
                 num_connected += 1 + self.__number_connected(node)
         return num_connected
 
-    def __number_connected_is_even(self, the_node, skip_node=None):
+    def __nodes_in_subtree_is_even(self, the_node, skip_node=None):
         return self.__nodes_in_subtree(the_node, skip_node) % 2 == 0
 
     def __degree(self, node):
