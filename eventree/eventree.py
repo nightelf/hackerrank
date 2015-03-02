@@ -19,11 +19,10 @@ class TreeGraph():
     visited = {}
 
     def add_edge(self, node_1, node_2):
-
         if not node_1 in self.adj_list:
             self.adj_list[node_1] = set()
         self.adj_list[node_1].add(node_2)
-
+        
         if not node_2 in self.adj_list:
             self.adj_list[node_2] = set()
         self.adj_list[node_2].add(node_1)
