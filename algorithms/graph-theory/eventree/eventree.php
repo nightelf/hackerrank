@@ -3,14 +3,14 @@
  * @author Jared
  */
 
-/*
-Problem:
-You are given a tree (a simple connected graph with no cycles). You have to remove
-as many edges from the tree as possible to obtain a forest with the condition that : 
-Each connected component of the forest should contain an even number of vertices.
-
-Link: https://www.hackerrank.com/challenges/even-tree
-*/
+/**
+ * Problem:
+ * You are given a tree (a simple connected graph with no cycles). You have to remove
+ * as many edges from the tree as possible to obtain a forest with the condition that : 
+ * Each connected component of the forest should contain an even number of vertices.
+ *
+ * See full problem: https://www.hackerrank.com/challenges/even-tree
+ */
 
 
 class TreeGraph {
@@ -87,6 +87,7 @@ function readGraph() {
         list($node_1, $node_2) = explode(" ", trim(fgets(STDIN)));
         $node_1 = (int) $node_1;
         $node_2 = (int) $node_2;
+        var_dump($node_1, $node_2);
         $graph->add_edge($node_1, $node_2);
     }
     return $graph;
