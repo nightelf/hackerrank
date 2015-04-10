@@ -15,16 +15,20 @@
 
 class TreeGraph {
 
-    private $_adj_list = array();
+    /** @var array the adjacency map */
+    private $_adjList = array();
+
+    /** @var array the visited map */
     private $_visited = array();
 
+    /** decompose the Graph */
     public function decompose() {
         $cuts = 0;
-        foreach (array_keys($this->_adj_list) as $node) {
-            foreach ($this->_adj_list[$node] as $edge_node => $value) {
-                if ($this->_nodes_in_subtree_is_even($node, $edge_node)
-                    && $this->_nodes_in_subtree_is_even($edge_node, $node)) {
-                    $this->_cut($node, $edge_node);
+        foreach (array_keys($this->_adjList) as $node) {
+            foreach ($this->_adjList[$node] as $edgeNode => $value) {
+                if ($this->_nodesInSubtreeIsEven($node, $edgeNode)
+                    && $this->_nodesInSubtreeIsEven($edgeNode, $node)) {
+                    $this->_cut($node, $edgeNode);
                     $cuts += 1;
                 }
             }
@@ -32,50 +36,76 @@ class TreeGraph {
         return $cuts;
     }
 
-    public function add_edge($node_1, $node_2) {
+    /**
+     * Add an edge to the graph
+     * @param integer $node1 a node
+     * @param integer $node2 a node
+     */
+    public function addEdge($node1, $node2) {
 
-        $this->_add_edge_node($node_1, $node_2);
-        $this->_add_edge_node($node_2, $node_1);
+        $this->_addEdgeNode($node1, $node2);
+        $this->_addEdgeNode($node2, $node1);
     }
 
-    private function _add_edge_node($node_1, $node_2) {
+    /**
+     * Add an edge to the graph
+     * @param integer $mainNode adjacency node
+     * @param integer $adjacentNode connected node
+     */
+    private function _addEdgeNode($mainNode, $adjacentNode) {
 
-        if (!isset($this->_adj_list[$node_1])) {
-            $this->_adj_list[$node_1] = array();
+        if (!isset($this->_adjList[$mainNode])) {
+            $this->_adjList[$mainNode] = array();
         }
-        $this->_adj_list[$node_1][$node_2] = true;
+        $this->_adjList[$mainNode][$adjacentNode] = true;
     }
 
+    /**
+     * Cut an edge on the graph
+     * @param integer $node1 a node
+     * @param integer $node2 a node
+     */
     private function _cut($node1, $node2) {
-        unset($this->_adj_list[$node1][$node2]);
-        unset($this->_adj_list[$node2][$node1]);
+        unset($this->_adjList[$node1][$node2]);
+        unset($this->_adjList[$node2][$node1]);
     }
 
-    private function _nodes_in_subtree_is_even($the_node, $skip_node=null) {
-        $this->_visited = array($the_node => true);
-        if ($skip_node !== null) {
-            $this->_visited[$skip_node] = true;
+    /**
+     * Is the number of nodes in the subtree even?
+     * @param integer $theNode node to start counting from
+     * @param integer $skipNode adjecent nodes to skip
+     * @return boolean
+     */
+    private function _nodesInSubtreeIsEven($theNode, $skipNode=null) {
+        $this->_visited = array($theNode => true);
+        if ($skipNode !== null) {
+            $this->_visited[$skipNode] = true;
         }
-        return ($this->_number_connected($the_node) + 1) % 2 == 0;
+        return ($this->_numberConnected($theNode) + 1) % 2 == 0;
     }
 
-    private function _number_connected($the_node) {
+    /**
+     * Number connected to the node
+     * @param integer $theNode node to start counting from
+     * @return integer
+     */
+    private function _numberConnected($theNode) {
         $num_connected = 0;
-        foreach ($this->_adj_list[$the_node] as $node => $value) {
+        foreach ($this->_adjList[$theNode] as $node => $value) {
             
             if (!isset($this->_visited[$node])) {
                 $this->_visited[$node] = true;
-                $num_connected += $this->_number_connected($node) + 1;
+                $num_connected += $this->_numberConnected($node) + 1;
             }
         }
         return $num_connected;
     }
-
-    private function _degree($node) {
-        return count($this->_adj_list[$node]);
-    }
 }
 
+/**
+ * Read the graph from Stdin
+ * @return TreeGraph
+ */
 function readGraph() {
 
     list($num_vertices, $num_edges) = explode(" ", trim(fgets(STDIN)));
@@ -84,11 +114,10 @@ function readGraph() {
     $graph = new TreeGraph();
 
     for ($i = 0; $i < $num_edges; $i++) {
-        list($node_1, $node_2) = explode(" ", trim(fgets(STDIN)));
-        $node_1 = (int) $node_1;
-        $node_2 = (int) $node_2;
-        var_dump($node_1, $node_2);
-        $graph->add_edge($node_1, $node_2);
+        list($node1, $node2) = explode(" ", trim(fgets(STDIN)));
+        $node1 = (int) $node1;
+        $node2 = (int) $node2;
+        $graph->addEdge($node1, $node2);
     }
     return $graph;
 }
