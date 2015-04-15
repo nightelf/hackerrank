@@ -1,6 +1,6 @@
 # python
 *.pyc
-
+*.class
 # IntelliJ / PyCharm
 .idea/
 

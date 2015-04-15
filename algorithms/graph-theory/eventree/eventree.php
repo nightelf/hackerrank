@@ -12,7 +12,7 @@
  * See full problem: https://www.hackerrank.com/challenges/even-tree
  */
 
-
+/** A tree graph */
 class TreeGraph {
 
     /** @var array the adjacency map */
